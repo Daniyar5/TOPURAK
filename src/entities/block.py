@@ -24,7 +24,9 @@ TEXTURES = {
     "K": load_block_image('assets/sprites/blocks/stone_floor_v2_2.png'),
     "L": load_block_image('assets/sprites/blocks/stone_floor_v2_3.png'),
     "M": load_block_image('assets/sprites/blocks/stone_floor_v2_4.png'),
+    "Z": load_block_image('assets/sprites/blocks/stone_floor_v2_6.png'),
     "N": load_block_image('assets/sprites/blocks/ladder.png'),
+    "z": load_block_image('assets/sprites/blocks/brick_shadow.png'),
 
     # Стены
     "4": load_block_image('assets/sprites/blocks/brick.png'),
