@@ -23,7 +23,7 @@ class Player:
 
         self.current_frame = 0
         self.animation_timer = 0
-        self.animation_speed = 10
+        self.animation_speed = 60 / 6
         self.idle_delay = 220
         self.direction = 'idle'
         self.moving = False
@@ -87,7 +87,7 @@ class Player:
             current_target_time = self.idle_delay
         self.animation_timer += 1
         if self.animation_timer >= current_target_time:
-            self.animation_timer = 0
+            self.animation_timer -= current_target_time
             current_anim_length = len(self.animations[self.direction])
             self.current_frame = (self.current_frame + 1) % current_anim_length
 

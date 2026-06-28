@@ -4,12 +4,15 @@ from src.ui.menu import create_main_menu
 
 pygame.init()
 
+game_instance = Game()
+
 clock = pygame.time.Clock()
 menu = create_main_menu()
 current_screen = 'menu'
 start = True
 while start:
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         if event.type == pygame.QUIT:
             start = False
         if current_screen == 'menu':
@@ -22,7 +25,7 @@ while start:
     if current_screen == 'menu':
         menu.draw()
     elif current_screen == 'game':
-        Game.draw()
+        game_instance.update_and_draw(events)
 
     pygame.display.flip()
     clock.tick(60)
