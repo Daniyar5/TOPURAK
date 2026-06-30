@@ -36,7 +36,7 @@ layer_objects = [
     "",
     "",
     "",
-    "",
+    "           o                         o",
     "                         d",
     "                                  zz",
     "        E        F", 

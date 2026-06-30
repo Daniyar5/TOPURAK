@@ -1,5 +1,4 @@
-import pygame
-import math
+import pygame, math
 from src.core.window import window
 from src.utils.assets import load_animation_frames
 
@@ -17,7 +16,16 @@ class Player:
         self.hitbox = self.rect.inflate(-12, -self.rect.height / 2)
         self.hitbox.midbottom = self.rect.midbottom
         self.pos = pygame.math.Vector2(self.hitbox.center)
-        self.speed = speed
+
+        self.base_speed = speed   
+        self.dash_speed = speed * 2.5
+        self.speed = self.base_speed
+        
+        self.is_dashing = False
+        self.dash_start_time = 0
+        self.dash_duration = 200
+        self.last_dash_time = 0
+        self.dash_cooldown = 1500
 
         self.inventory = []
 
@@ -35,6 +43,21 @@ class Player:
     def move(self, solid_rects):
         keys = pygame.key.get_pressed()
         move_dir = pygame.math.Vector2(0, 0)
+        current_time = pygame.time.get_ticks()
+
+        if keys[pygame.K_LSHIFT] and not self.is_dashing:
+            if current_time - self.last_dash_time >= self.dash_cooldown:
+                self.is_dashing = True
+                self.dash_start_time = current_time
+                self.last_dash_time = current_time
+                self.speed = self.dash_speed
+            else:
+                pass
+
+        if self.is_dashing:
+            if current_time - self.dash_start_time >= self.dash_duration:
+                self.is_dashing = False         
+                self.speed = self.base_speed
 
         if keys[pygame.K_w]:
             move_dir.y -= 1

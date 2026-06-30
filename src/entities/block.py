@@ -44,6 +44,7 @@ TEXTURES = {
     # Объекты
     "d": load_block_image('assets/sprites/objects/door_1.png', True),
     "c": load_block_image('assets/sprites/objects/door_2.png', True),
+    "o": load_block_image('assets/sprites/objects/door_open.png', True),
 
     # Мебель
     "t": load_block_image('assets/sprites/furnitures/table.png', True),

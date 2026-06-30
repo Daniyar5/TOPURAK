@@ -11,7 +11,7 @@ class Loss:
 
         self.current_frame = 0
         self.animation_timer = 0
-        self.animation_speed = 60 / 10
+        self.animation_speed = 60 / 8
         self.direction = 'fall'
         self.is_finished = False
         self.respawn_button = Button(0, 0, 'assets/sprites/buttons/respawn.png')

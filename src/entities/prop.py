@@ -1,6 +1,5 @@
 import pygame
 from src.entities.block import Block
-from src.core.window import window
 
 class Prop(Block):
     def __init__(self, x, y, tile_size, block_type):
