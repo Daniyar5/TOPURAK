@@ -1,22 +1,16 @@
-from src.ui.button import Button
 from src.ui.background import Background
+from src.ui.button import Button
 from src.core.window import width, height
-from src.ui.title import Title
 
-class Menu:
+class Settings:
     def __init__(self):
         self.background = Background('assets/sprites/backgrounds/bg_menu.png')
-        self.title = Title('assets/sprites/title/TOPURAK.png', width / 2, height * 0.16)
         self.buttons = {
-            'play': Button('assets/sprites/buttons/play.png', width / 2, height * 0.50),
-            'settings': Button('assets/sprites/buttons/settings.png', width / 2, height * 0.68),
-            'exit': Button('assets/sprites/buttons/exit.png', width / 2, height * 0.86)
+            'back': Button('assets/sprites/buttons/back.png', width * 0.12, height * 0.9)
         }
-
 
     def draw(self):
         self.background.draw()
-        self.title.draw()
         for button in self.buttons.values():
             button.draw()
 

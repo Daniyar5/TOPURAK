@@ -1,4 +1,3 @@
-import pygame
 from src.core.window import window, width, height
 from src.utils.assets import load_animation_frames
 from src.ui.button import Button
@@ -14,16 +13,14 @@ class Loss:
         self.animation_speed = 60 / 8
         self.direction = 'fall'
         self.is_finished = False
-        self.respawn_button = Button(0, 0, 'assets/sprites/buttons/respawn.png')
-        self.respawn_button.rect.bottomright = (width - 20, height - 20)
-        self.respawn_button.pos = pygame.math.Vector2(self.respawn_button.rect.topleft)
+        self.respawn_button = Button('assets/sprites/buttons/respawn.png', width * 0.23, height * 0.90)
 
     def reset(self):
         self.current_frame = 0
         self.animation_timer = 0
         self.is_finished = False
 
-    def animated(self):
+    def animation(self):
         if not self.is_finished:
             self.animation_timer += 1
             if self.animation_timer >= self.animation_speed:
@@ -34,7 +31,7 @@ class Loss:
                     self.is_finished = True
                     
     def draw(self, events):
-        self.animated()
+        self.animation()
         current_image = self.animations[self.direction][self.current_frame]
         window.blit(current_image, (0, 0))
         if self.is_finished:
