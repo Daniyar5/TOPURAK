@@ -50,7 +50,10 @@ TEXTURES = {
     "t": load_block_image('assets/sprites/furnitures/table.png', True),
 
     # Предметы
-    "k": load_block_image('assets/sprites/items/kay_gold.png', True)
+    "k": load_block_image('assets/sprites/items/kay_gold.png', True),
+
+    # Мусор
+    "h": load_block_image('assets/sprites/trash/trash.png', True)
 }
 
 class Block:

@@ -79,7 +79,7 @@ class Game:
             return
             
         # Обычная логика игры
-        self.player.move(self.level.rects)
+        self.player.move(self.level.rects, self.camera)
         
         if self.player.check_pits(self.level.pit_rects) == "fall":
             self.state = "game_over" 

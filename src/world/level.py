@@ -15,7 +15,7 @@ class Level:
         solid_types = ['O', 'W', 'Q', 'S', 'T', 'U']
         object_types = ['t', '4', 'R', 'V', 'X', 'Y', 'd', 'c']
         pit_types = ['I']
-        open_door_typs = ['o']
+        open_door_types = ['o']
 
 
         foreground_types = []
@@ -39,7 +39,7 @@ class Level:
                         new_object = Prop(x, y, self.tile_size, char)
                         self.props.append(new_object)
                         self.rects.append(new_object.hitbox)
-                    elif char in open_door_typs and char in TEXTURES:
+                    elif char in open_door_types and char in TEXTURES:
                         new_door = Block(x, y, char)
                         self.props.append(new_door)
                     elif char in pit_types and char in TEXTURES:
