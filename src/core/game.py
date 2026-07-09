@@ -2,9 +2,8 @@ import json, os
 from src.core.window import window, width, height, new_form
 from src.entities.player import Player
 from src.world.level import Level
-from src.world.map import level_1_layers, level_2_layers
 from src.core.camera import Camera
-from src.entities.block import TEXTURES
+from src.entities.textures import TEXTURES
 from src.ui.loss import Loss
 
 TILE_SIZE = 16 * new_form
@@ -27,14 +26,13 @@ class Game:
         self.state = "playing"
 
         if level_num == 1:
-            layers = level_1_layers
+            self.level = Level("assets/maps/level_1.tmx")
         elif level_num == 2:
-            layers = level_2_layers
+            self.level = Level("assets/maps/level_2.tmx")
         else:
             print("Поздравляем, игра пройдена! Других уровней пока нет.")
             return
 
-        self.level = Level(layers, TILE_SIZE)
         spawn_x, spawn_y = self.level.player_spawn
         self.player.set_position(spawn_x, spawn_y)
         self.camera.x = self.player.rect.centerx - self.camera.width / 2
@@ -67,11 +65,10 @@ class Game:
             self.load_level(1)
 
     def update_and_draw(self, events):
-        # Если уровень не загрузился, ничего не делаем
         if self.level is None:
             return
             
-        # Проверка состояния "Поражение"
+        # Проверка проигрыша
         if self.state == "game_over":
             action = self.loss_screen.draw(events)
             if action == "respawn":

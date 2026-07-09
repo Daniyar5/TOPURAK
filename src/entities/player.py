@@ -5,7 +5,9 @@ from src.utils.assets import load_animation_frames, load_image
 class Player:
     def __init__(self, folder_path, x, y, speed):
         self.animations = {
-            'idle': load_animation_frames(folder_path, 'idle'),
+            'idle_right': load_animation_frames(folder_path, 'idle_right'),
+            'idle_left': load_animation_frames(folder_path, 'idle_left'),
+            'idle_down': load_animation_frames(folder_path, 'idle_down'),
             'right': load_animation_frames(folder_path, 'run_right'),
             'left': load_animation_frames(folder_path, 'run_left'),
             'up': load_animation_frames(folder_path, 'run_up'),
@@ -13,7 +15,7 @@ class Player:
         }
         self.aim_image = load_image('assets/sprites/player/aim.png')
 
-        self.skin = self.animations['idle'][0]
+        self.skin = self.animations['idle_down'][0]
         self.rect = self.skin.get_rect(topleft=(x, y))
         self.hitbox = self.rect.inflate(-12, -self.rect.height / 2)
         self.hitbox.midbottom = self.rect.midbottom
@@ -39,11 +41,21 @@ class Player:
         self.animation_timer = 0
         self.animation_speed = 60 / 6
         self.idle_delay = 220
-        self.direction = 'idle'
+        self.direction = 'down'
         self.moving = False
 
     def draw(self, camera):
-        current_skin = self.animations[self.direction][self.current_frame]
+        if self.moving or self.is_aiming or self.is_dashing:
+            anim_list = self.animations[self.direction]
+        else:
+            if self.direction == 'up':
+                anim_list = self.animations['up']
+            else:
+                anim_list = self.animations[f'idle_{self.direction}']
+        if self.current_frame >= len(anim_list):
+            self.current_frame = 0
+
+        current_skin = anim_list[self.current_frame]
         window.blit(current_skin, (self.rect.x - camera.x, self.rect.y - camera.y))
 
         if self.is_aiming:
@@ -57,6 +69,7 @@ class Player:
         move_dir = pygame.math.Vector2(0, 0)
         current_time = pygame.time.get_ticks()
 
+        # Рывок
         shift_pressed = keys[pygame.K_LSHIFT]
 
         if shift_pressed and not self.is_dashing and (current_time - self.last_dash_time >= self.dash_cooldown):
@@ -106,6 +119,7 @@ class Player:
             else:
                 move_dir = self.dash_dir
 
+        # Бег туда сюда
         if not self.is_aiming and not self.is_dashing:
             self.speed = self.base_speed
             if keys[pygame.K_w]:
@@ -126,7 +140,6 @@ class Player:
                 self.moving = True
             else:
                 self.moving = False
-                self.direction = 'idle'
         elif self.is_aiming:
             self.moving = False
 
@@ -158,22 +171,30 @@ class Player:
         if self.is_aiming:
             self.current_frame = min(2, len(self.animations[self.direction]) - 1)
             return
-            
         if self.is_dashing:
             self.current_frame = 0
             return
+        if not self.moving and self.direction == 'up':
+            self.current_frame = 0
+            return
+
         current_target_time = self.animation_speed
-        if self.direction == 'idle' and self.current_frame == 0:
+        if not self.moving and self.current_frame == 0:
             current_target_time = self.idle_delay
         self.animation_timer += 1
         if self.animation_timer >= current_target_time:
             self.animation_timer -= current_target_time
-            current_anim_length = len(self.animations[self.direction])
+            
+            if self.moving:
+                current_anim_length = len(self.animations[self.direction])
+            else:
+                current_anim_length = len(self.animations[f'idle_{self.direction}'])
+                
             self.current_frame = (self.current_frame + 1) % current_anim_length
 
     def set_position(self, x, y):
-        self.rect.topleft = (x, y)
-        self.hitbox = self.rect.inflate(-10, -self.rect.height / 2)
+        self.rect.center = (x, y)
+        self.hitbox = self.rect.inflate(-12, -self.rect.height / 2)
         self.hitbox.midbottom = self.rect.midbottom 
         self.pos = pygame.math.Vector2(self.hitbox.center)
 
@@ -187,11 +208,11 @@ class Player:
                     items.remove(item)
             
             for prop in props:
-                if prop.type == "c": 
+                if prop.type == "door": 
                     dist = math.hypot(self.rect.centerx - prop.rect.centerx, self.rect.centery - prop.rect.centery)
                     if dist < 180:
-                        if "k" in self.inventory:
-                            self.inventory.remove("k")
+                        if "key" in self.inventory:
+                            self.inventory.remove("key")
                             return "next_level"
         return None
     
@@ -199,5 +220,4 @@ class Player:
         for pit in pit_rects:
             if pit.collidepoint(self.hitbox.center):
                 return "fall"
-                
         return None
